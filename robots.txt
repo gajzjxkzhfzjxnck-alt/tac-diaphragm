@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gajzjxkzhfzjxnck-alt.github.io/tac-diaphragm/sitemap.xml
