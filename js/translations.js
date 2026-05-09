@@ -1,16 +1,33 @@
 /* ===== tac-diaphragm.com - Translations ===== */
-/* Chinese translations for all content */
+/* Stores original English text and provides Chinese translations */
+
+const originalTexts = new Map();
+
+function saveOriginals() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (!originalTexts.has(key)) {
+      originalTexts.set(key, el.innerHTML);
+    }
+  });
+}
 
 const translations = {
   zh: {
     /* Nav */
     'nav.home': '首页',
+    'nav.about': '关于我们',
     'nav.technology': '技术',
     'nav.products': '产品',
     'nav.applications': '应用',
     'nav.case-studies': '案例',
     'nav.quality': '质量',
     'nav.contact': '联系',
+
+    /* Company name */
+    'company.name': '天勃科技',
+    'company.name.full': '广东天勃科技有限公司',
+    'company.name.brand': '天勃科技 — ta-C 钻石镀膜振膜专家',
 
     /* Home - Hero */
     'hero.badge': '新一代扬声器振膜技术',
@@ -93,7 +110,6 @@ const translations = {
     'casestudy.bullet2': '支持LDAC和aptX Lossless高清无线传输（24bit/96kHz）',
     'casestudy.bullet3': '类金刚石（DLC/ta-C）镀层复合振膜提供极佳高频延伸和瞬态响应',
     'casestudy.bullet4': '16.2mm超大动圈单元，实现高保真音质',
-    'casestudy.cta': '了解更多',
 
     /* Home - CTA */
     'cta.title': '为您的下一代产品配备 ta-C 钻石振膜',
@@ -114,7 +130,7 @@ const translations = {
 
     /* Footer */
     'footer.brand': '天勃科技 — ta-C 钻石镀膜振膜专家',
-    'footer.desc': '广东天勃科技有限公司专注于ta-C钻石镀膜扬声器振膜的研发与生产，采用日本进口基材和自主FCVA沉积工艺，为全球音频品牌提供高性能振膜解决方案。',
+    'footer.desc': '广东天勃科技有限公司（Senioracoustic）专注于ta-C钻石镀膜扬声器振膜的研发与生产，采用日本进口基材和自主FCVA沉积工艺，为全球音频品牌提供高性能振膜解决方案。',
     'footer.products': '产品',
     'footer.products.pet': 'PET + ta-C 钻石膜',
     'footer.products.peek': 'PEEK + ta-C 钻石膜',
@@ -128,7 +144,23 @@ const translations = {
     'footer.support.case': '客户案例',
     'footer.support.apps': '应用领域',
     'footer.support.sample': '申请样品',
-    'footer.copyright': '© 2026 广东天勃科技有限公司。保留所有权利。',
+    'footer.copyright': '© 2026 广东天勃科技有限公司（Senioracoustic）。保留所有权利。',
+
+    /* About Page */
+    'about.page.title': '关于天勃科技',
+    'about.page.desc': '了解我们的公司、使命与核心技术能力',
+    'about.intro.title': '我们的故事',
+    'about.intro.p1': '广东天勃科技有限公司（Senioracoustic）是一家总部位于广东东莞的音频技术公司，专注于高端扬声器振膜及音频检测设备的研发与生产。',
+    'about.intro.p2': '天勃科技在音频检测设备领域拥有多年研发与生产经验，独立自主开发了音频分析软件系统。公司拥有大型全消声室、音频分析仪、电声测试仪、蓝牙分析仪、人工嘴、人工耳、人工头等全套专业测试设备。',
+    'about.philosophy.title': '我们的信念',
+    'about.philosophy.p1': '我们坚信：振膜是决定扬声器品质的核心。理想的振膜需要同时具备轻量化、高杨氏模量、适当的阻尼以及小的分割振动。关键在于振动的前沿与延迟——收到信号立即振动，信号消失及时停止。',
+    'about.philosophy.p2': 'ta-C钻石振膜在声传导速度和内阻方面实现了"完美平衡"，具有理想的前沿与延迟特性、超高灵敏度和出色的瞬态响应。',
+    'about.tech.title': '技术实力',
+    'about.tech.item1': '成熟的ta-C（四面体非晶碳/钻石）振膜生产线',
+    'about.tech.item2': '磁过滤阴极真空电弧沉积技术（FCVA）',
+    'about.tech.item3': '自主研发生长的低能耗加工方法，实现量产',
+    'about.tech.item4': '严格完善的质量检验体系',
+    'about.tech.item5': '全消声室及多种专业测试设备',
 
     /* Technology Page */
     'tech.page.title': 'ta-C 钻石镀膜技术',
@@ -224,31 +256,29 @@ function getCurrentLang() {
 }
 
 function applyTranslations(lang) {
-  const t = translations[lang];
-  if (!t) return;
+  if (lang === 'en') {
+    // Restore original English text
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (originalTexts.has(key)) {
+        el.innerHTML = originalTexts.get(key);
+      }
+    });
+    document.documentElement.lang = 'en';
+  } else {
+    // Apply Chinese translations
+    const t = translations[lang];
+    if (!t) return;
 
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.dataset.i18n;
-    if (t[key]) {
-      el.innerHTML = t[key];
-    }
-  });
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (t[key]) {
+        el.innerHTML = t[key];
+      }
+    });
+    document.documentElement.lang = lang;
+  }
 
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.dataset.i18nPlaceholder;
-    if (t[key]) {
-      el.placeholder = t[key];
-    }
-  });
-
-  document.querySelectorAll('[data-i18n-value]').forEach(el => {
-    const key = el.dataset.i18nValue;
-    if (t[key]) {
-      el.value = t[key];
-    }
-  });
-
-  document.documentElement.lang = lang;
   localStorage.setItem('tac_lang', lang);
 
   // Update lang buttons
@@ -259,4 +289,11 @@ function applyTranslations(lang) {
 
 function switchLang(lang) {
   applyTranslations(lang);
+}
+
+// Save originals when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', saveOriginals);
+} else {
+  saveOriginals();
 }
